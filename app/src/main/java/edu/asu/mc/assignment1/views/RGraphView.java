@@ -304,4 +304,22 @@ public class RGraphView extends View {
         float ypos = ((y - yMin) / (yMax - yMin))  * graphHeight;
         return (graphHeight - ypos) + startY;
     }
+
+    /**
+     *
+     * @param points
+     */
+    public void setPoints(List<Point> points) {
+        this.points = points;
+    }
+
+    /**
+     * Set the x start value and x end value
+     * @param xStartValue
+     * @param xEndValue
+     */
+    public void setStartEndXValues(float xStartValue, float xEndValue) {
+        this.xStartValue = xStartValue;
+        this.xEndValue = xEndValue;
+    }
 }

@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.asu.mc.assignment1.data.Point;
@@ -53,19 +54,77 @@ public class MainActivity extends AppCompatActivity {
 
     private static String TAG = "MainActivity";
 
+    private int numXPoints = 6;
+
+    private int numYPoints = 10;
+
+    private int numPointsPerScreen = 120;
+
+    private int totalPoints = numPointsPerScreen * 6;
+
+    private int numSkipPoints = 24;
+
+    private int yMin = 0;
+
+    private int yMax = 9;
+
+    private int delayTime = 500;
+
     /**
      * Thread to update points
      */
     private Runnable updaterUI = new Runnable() {
 
-        private int start = 0;
+        /**
+         * skips
+         */
+        private int skips = 0;
 
         @Override
         public void run() {
-            if (start >= points.size()) {
-                // stop the process
-                return;
+            // run the task only started
+            int start = 0;
+            List<Point> points = new ArrayList<Point>();
+            switch (getCurrentState()) {
+                case PAUSED:
+                    break;
+                case STARTED:
+                    points = getNextPoints();
+                    if (points.size() == 0) {
+                        skips = 0;
+                        stopGraph();
+                    } else {
+                        start = skips * numSkipPoints;
+                        skips++;
+                    }
+                    graphView.setPoints(points);
+                    graphView.setStartEndXValues(start, start + numPointsPerScreen);
+                    graphView.invalidate();
+                    break;
+                case STOPPED:
+                    skips = 0;
+                    graphView.setPoints(points);
+                    graphView.setStartEndXValues(start, start + numPointsPerScreen);
+                    graphView.invalidate();
+                    break;
             }
+            handler.postDelayed(updaterUI, delayTime);
+        }
+
+        /**
+         * Get next set of points
+         * @return points
+         */
+        private List<Point> getNextPoints() {
+            if (skips * numSkipPoints >= points.size()) {
+                return new ArrayList<Point>();
+            }
+
+            int start = skips * numSkipPoints;
+            int end = start + numPointsPerScreen;
+            end = end > points.size() ? points.size() : end;
+
+            return points.subList(start, end);
         }
     };
 
@@ -82,26 +141,12 @@ public class MainActivity extends AppCompatActivity {
         // add event listeners for start and stop buttons
         addEventListeners();
 
-        // Initialize graph view
-        LayoutInflater inflater = getLayoutInflater();
-        ViewGroup viewGroup;
-        graphView = new RGraphView(getApplicationContext(),
-                points,
-                "Title",
-                0,
-                9,
-                4,
-                10,
-                0,
-                123,
-                124);
-
-        viewGroup = (ViewGroup) findViewById(R.id.graph_content);
-        viewGroup.addView(graphView, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT));
+        // initialize graph
+        initGraph();
 
         // create a handler
         handler = new Handler();
+        handler.post(updaterUI);
     }
 
     /**
@@ -118,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                switch (currentState) {
+                switch (getCurrentState()) {
                     case STOPPED: // initially stopped
                         startGraph();
                         break;
@@ -134,6 +179,8 @@ public class MainActivity extends AppCompatActivity {
 
         stopButton.setOnClickListener(new View.OnClickListener() {
 
+            private boolean init = true;
+
             @Override
             public void onClick(View v) {
                 switch (currentState) {
@@ -147,6 +194,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        // set clickable false
+        stopButton.setClickable(false);
     }
 
     @Override
@@ -180,17 +230,40 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Init points
+     * @return currentState
      */
-    private void initData() {
-        points = Point.getValues(0, 9, 124);
+    public State getCurrentState() {
+        return currentState;
     }
 
     /**
-     * Reset the points
+     * Init points
      */
-    private void resetData() {
+    private void initData() {
+        points = Point.getValues(yMin, yMax, totalPoints);
+    }
 
+    /**
+     * Init graph
+     */
+    private void initGraph() {
+        // Initialize graph view
+        ViewGroup viewGroup;
+        graphView = new RGraphView(getApplicationContext(),
+                null, // Points - initially set it to null
+                "Sin curve", // title of the graph
+                yMin, // min value of y coordinate
+                yMax, // max value of y coordinate
+                numXPoints, // num of x points
+                numYPoints, // num of y points
+                0, // x start value
+                numPointsPerScreen, // x end value
+                numPointsPerScreen); // num of points on the screen
+
+        viewGroup = (ViewGroup) findViewById(R.id.graph_content);
+        viewGroup.addView(graphView, 0, new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT));
     }
 
     /**
@@ -208,7 +281,6 @@ public class MainActivity extends AppCompatActivity {
      */
     private void stopGraph() {
         setCurrentState(State.STOPPED);
-        resetData();
         stopButton.setClickable(false);
         startButton.setText(getResources().getText(R.string.button_start));
     }
