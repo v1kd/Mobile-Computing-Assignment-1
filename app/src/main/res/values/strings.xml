@@ -4,4 +4,7 @@
     <string name="button_stop">Stop</string>
     <string name="button_start">Run</string>
     <string name="button_pause">Pause</string>
+    <string name="patient_id">Patient ID</string>
+    <string name="patient_age">Age</string>
+    <string name="patient_name">Patient Name</string>
 </resources>

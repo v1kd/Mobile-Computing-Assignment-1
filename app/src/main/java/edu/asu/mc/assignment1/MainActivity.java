@@ -62,13 +62,13 @@ public class MainActivity extends AppCompatActivity {
 
     private int totalPoints = numPointsPerScreen * 6;
 
-    private int numSkipPoints = 24;
+    private int numSkipPoints = 1;
 
     private int yMin = 0;
 
     private int yMax = 9;
 
-    private int delayTime = 500;
+    private int delayTime = 50;
 
     /**
      * Thread to update points
@@ -251,7 +251,7 @@ public class MainActivity extends AppCompatActivity {
         ViewGroup viewGroup;
         graphView = new RGraphView(getApplicationContext(),
                 null, // Points - initially set it to null
-                "Sin curve", // title of the graph
+                "Graph", // title of the graph
                 yMin, // min value of y coordinate
                 yMax, // max value of y coordinate
                 numXPoints, // num of x points

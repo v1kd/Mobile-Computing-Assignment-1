@@ -9,4 +9,7 @@
 
     <!-- Font size for -->
     <dimen name="label_size">12sp</dimen>
+
+    <!-- Field dimensions -->
+    <dimen name="field_size">14sp</dimen>
 </resources>
