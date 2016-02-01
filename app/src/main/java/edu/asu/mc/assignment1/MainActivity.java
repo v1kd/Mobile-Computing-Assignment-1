@@ -90,11 +90,11 @@ public class MainActivity extends AppCompatActivity {
                 "Title",
                 0,
                 9,
-                12,
+                4,
                 10,
                 0,
-                11,
-                12);
+                123,
+                124);
 
         viewGroup = (ViewGroup) findViewById(R.id.graph_content);
         viewGroup.addView(graphView, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
      * Init points
      */
     private void initData() {
-        points = Point.getValues(0, 9, 24);
+        points = Point.getValues(0, 9, 124);
     }
 
     /**

@@ -31,17 +31,17 @@
             android:layout_weight="1"
             android:clickable="false" />
     </LinearLayout>
-
-
+<!--
     <LinearLayout
         android:id="@+id/text_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" />
+        android:orientation="vertical" />-->
 
     <LinearLayout
         android:id="@+id/graph_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" />
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"/>
 </LinearLayout>
