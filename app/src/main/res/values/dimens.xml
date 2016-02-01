@@ -3,4 +3,10 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
+    <!-- Font size for title  -->
+    <dimen name="title_size">15sp</dimen>
+
+    <!-- Font size for -->
+    <dimen name="label_size">12sp</dimen>
 </resources>
