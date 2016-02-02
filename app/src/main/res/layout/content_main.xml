@@ -44,11 +44,26 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <EditText android:id="@+id/patient_name"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:hint="@string/patient_name"
             android:textSize="@dimen/field_size"
             android:inputType="textCapWords"/>
+        <RadioGroup
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+            <RadioButton android:id="@+id/radio_male"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/male"/>
+            <RadioButton android:id="@+id/radio_female"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/female"/>
+        </RadioGroup>
     </LinearLayout>
 
     <LinearLayout

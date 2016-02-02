@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
     private int numYPoints = 10;
 
-    private int numPointsPerScreen = 120;
+    private int numPointsPerScreen = 60;
 
     private int totalPoints = numPointsPerScreen * 6;
 
@@ -84,26 +84,34 @@ public class MainActivity extends AppCompatActivity {
         public void run() {
             // run the task only started
             int start = 0;
-            List<Point> points = new ArrayList<Point>();
+            List<Point> nextPoints = new ArrayList<Point>();
             switch (getCurrentState()) {
                 case PAUSED:
                     break;
                 case STARTED:
-                    points = getNextPoints();
-                    if (points.size() == 0) {
+                    // check if points are empty
+                    if (points == null) {
+                        points = Point.getValues(yMin, yMax, totalPoints);
+                    }
+                    nextPoints = getNextPoints();
+                    if (nextPoints.size() == 0) {
                         skips = 0;
                         stopGraph();
                     } else {
                         start = skips * numSkipPoints;
                         skips++;
                     }
-                    graphView.setPoints(points);
+                    graphView.setPoints(nextPoints);
                     graphView.setStartEndXValues(start, start + numPointsPerScreen);
                     graphView.invalidate();
                     break;
                 case STOPPED:
                     skips = 0;
-                    graphView.setPoints(points);
+                    if (points != null) {
+                        points = null;
+                    }
+                    // set new points
+                    graphView.setPoints(nextPoints);
                     graphView.setStartEndXValues(start, start + numPointsPerScreen);
                     graphView.invalidate();
                     break;
@@ -134,9 +142,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         // get random data
-        initData();
+        // initData();
 
         // add event listeners for start and stop buttons
         addEventListeners();
