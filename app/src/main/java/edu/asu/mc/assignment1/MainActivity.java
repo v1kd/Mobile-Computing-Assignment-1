@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +50,11 @@ public class MainActivity extends AppCompatActivity {
      */
     private Button stopButton;
 
+    /**
+     * Status view
+     */
+    private TextView textStatusView;
+
     private static String TAG = "MainActivity";
 
     private int numXPoints = 6;
@@ -69,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Thread to update points
+     *
+     * http://stackoverflow.com/questions/14056240/delaye-canvas-update-using-timer-class
      */
     private Runnable updaterUI = new Runnable() {
 
@@ -138,6 +146,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        // init text status
+        this.textStatusView = (TextView) findViewById(R.id.text_status);
+
         setSupportActionBar(toolbar);
         // get random data
         // initData();
@@ -275,6 +287,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void startGraph() {
         setCurrentState(State.STARTED);
+        textStatusView.setText(R.string.graph_status_running);
         startButton.setText(getResources().getText(R.string.button_pause));
         // enable stop button
         stopButton.setClickable(true);
@@ -284,6 +297,7 @@ public class MainActivity extends AppCompatActivity {
      * Stop the graph when paused or started
      */
     private void stopGraph() {
+        textStatusView.setText(R.string.graph_status_init);
         setCurrentState(State.STOPPED);
         stopButton.setClickable(false);
         startButton.setText(getResources().getText(R.string.button_start));
@@ -293,6 +307,7 @@ public class MainActivity extends AppCompatActivity {
      * Pause from started state
      */
     private void pauseGraph() {
+        textStatusView.setText(R.string.graph_status_paused);
         setCurrentState(State.PAUSED);
         startButton.setText(getResources().getText(R.string.button_start));
     }
@@ -301,6 +316,7 @@ public class MainActivity extends AppCompatActivity {
      * Resume from pause state
      */
     private void resumeGraph() {
+        textStatusView.setText(R.string.graph_status_resumed);
         setCurrentState(State.STARTED);
         startButton.setText(getResources().getText(R.string.button_pause));
     }

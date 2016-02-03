@@ -13,7 +13,7 @@ import edu.asu.mc.assignment1.R;
 import edu.asu.mc.assignment1.data.Point;
 
 /**
- * Created by Vikranth on 1/31/2016.
+ * Created by Vikranth and Sachin on 1/31/2016.
  *
  * Improved graph view
  */
